@@ -82,6 +82,24 @@ foreach (var item in CitiesPopulationAvg)
         Console.WriteLine($"{item.PersonName} — {item.CityName}");
     }
 
+//Task5
+var task5=people.Where(p=>p.FullName.ToLower()=="Abubakr")
+    .Join(cities,
+        p => p.CityId,
+        c => c.Id,
+        (p, c) => new { person=p, city=c }).Select(s=>new
+    {
+        Personname=s.person.FullName,
+        cityName=s.city.Name,
+    })
+    .ToList();
+Console.WriteLine($"\nTask5\nPeoples Abubakr name\n");
+foreach (var s in task5)
+{
+    Console.WriteLine($"{s.cityName} {s.Personname}");
+}
+
+
 
 
 //Task6
@@ -129,4 +147,24 @@ foreach (var item in CitiesPopulationAvg)
             foreach (var item in youngestByCountry)
             {
                 Console.WriteLine($"{item.Country}: {item.YoungestPerson} ({item.Age} лет), город: {item.City}");
+            }
+
+//Task10
+            var cityWitLimitedYears = people
+                .Where(p => p.Age >= 20 && p.Age <= 30)  
+                .Join(cities,
+                    p => p.CityId,
+                    c => c.Id,
+                    (p, c) => new { Person = p, City = c })
+                .GroupBy(x => new {x.City.Name })
+                .Select(g => new
+                {
+                    City = g.Key.Name,
+                    People = g.Count()
+                })
+                .OrderByDescending(x => x.People).ToList();
+            Console.WriteLine($"\nTask10\nСамый молодой в каждом городе\n");
+            foreach (var s in cityWitLimitedYears)
+            {
+                Console.WriteLine($"{s.City} {s.People}");
             }
